@@ -301,92 +301,92 @@ def clientHD_app(conn, addr):
             conn.close()
             return(0)
         else:
+            print(1)
             break
     
-    
-        
-        request = Rx[9:15]
-        print('Request Code : ', request)
+
+    print(2)
+    request = Rx[9:15]
+    print('Request Code : ', request)
 
 
 ## login start
-        if request == log_CODE:
+    if request == log_CODE:
 
-            for i in range(len(Rx)):
-                try:
-                    if Rx[i:i+4]=='123#':
-                        id_s = i+4
-                        break
-                except:
-                    lock.acquire()
-                    print("\n$ >> Non-WAD Client   >>  ", addr, '@', str(datetime.now()))
-                    lock.release()
-                    return(0)
-
-            for i in range(id_s, len(Rx)):
-                if Rx[i]=='/':
-                    id_e = i
+        for i in range(len(Rx)):
+            try:
+                if Rx[i:i+4]=='123#':
+                    id_s = i+4
                     break
-            
-            user_id = Rx[id_s:id_e]
-            ui_len = len(user_id)
-            user_pw = Rx[id_e+1:]
-            up_len = len(user_pw)
-            
-            login_access = 0
-            lock.acquire()
-            fh = open('C:\\Users\\RETELLIGENCE\\Desktop\\WADING\\DB_iwen\\User_registor.txt', 'r')
-            rh = fh.read()
-            fh.close()
-            lock.release()
-           
-            print('request id : ', user_id)
-            print('request pw : ', user_pw)
-
-            for i in range(len(rh)):    
-                try:
-                    if rh[i:i+ui_len]==user_id:
-                        if rh[i+ui_len+2:i+ui_len+2+up_len]==user_pw:
-                            
-                            try:
-                                login_access = 1
-                                lock.acquire()
-                                print("\n$ >> Client Login success  >>  ", addr, user_id,  '@', str(datetime.now()))
-                                lock.release()
-                                conn.send(('###WAD#*#qwe123').encode()) # login success
-                            except:
-                                lock.acquire()
-                                print("\n$ >> Client error  >>  ", addr, '@', str(datetime.now()))
-                                lock.release()
-                                conn.close()
-                                return(0)
-                            else:
-                                lock.acquire()
-                                live_APP.append(user_id)
-                                lock.release()
-                                conn.close()
-                                return(0)
-                except:
-                    break
-                
-            if login_access != 1: # login fail
+            except:
                 lock.acquire()
-                print("\n$ >> Client Login Failed  >>  ", addr, '@', str(datetime.now()))
+                print("\n$ >> Non-WAD Client   >>  ", addr, '@', str(datetime.now()))
                 lock.release()
-                try:
-                    conn.send(('###WAD#*#ewq321').decode())
-                except:
-                    lock.acquire()
-                    print("\n$ >> Client error  >>  ", addr, '@', str(datetime.now()))
-                    lock.release()
-                finally:
-                    conn.close()
-                    return(0)
+                return(0)
 
-            else: # loged in
-                while(1):
+        for i in range(id_s, len(Rx)):
+            if Rx[i]=='/':
+                id_e = i
+                break
+        
+        user_id = Rx[id_s:id_e]
+        ui_len = len(user_id)
+        user_pw = Rx[id_e+1:]
+        up_len = len(user_pw)
+        
+        login_access = 0
+        lock.acquire()
+        fh = open('C:\\Users\\RETELLIGENCE\\Desktop\\WADING\\DB_iwen\\User_registor.txt', 'r')
+        rh = fh.read()
+        fh.close()
+        lock.release()
+       
+        print('request id : ', user_id)
+        print('request pw : ', user_pw)
+
+        for i in range(len(rh)):    
+            try:
+                if rh[i:i+ui_len]==user_id:
+                    if rh[i+ui_len+2:i+ui_len+2+up_len]==user_pw:
+                        
+                        try:
+                            login_access = 1
+                            lock.acquire()
+                            print("\n$ >> Client Login success  >>  ", addr, user_id,  '@', str(datetime.now()))
+                            lock.release()
+                            conn.send(('###WAD#*#qwe123').encode()) # login success
+                        except:
+                            lock.acquire()
+                            print("\n$ >> Client error  >>  ", addr, '@', str(datetime.now()))
+                            lock.release()
+                            conn.close()
+                            return(0)
+                        else:
+                            lock.acquire()
+                            live_APP.append(user_id)
+                            lock.release()
+                            conn.close()
+                            return(0)
+            except:
+                break
+            
+        if login_access != 1: # login fail
+            lock.acquire()
+            print("\n$ >> Client Login Failed  >>  ", addr, '@', str(datetime.now()))
+            lock.release()
+            try:
+                conn.send(('###WAD#*#ewq321').decode())
+            except:
+                lock.acquire()
+                print("\n$ >> Client error  >>  ", addr, '@', str(datetime.now()))
+                lock.release()
+            finally:
                 conn.close()
                 return(0)
+
+        else: # loged in
+            conn.close()
+            return(0)
 ## login end
                                         
 
@@ -396,76 +396,74 @@ def clientHD_app(conn, addr):
 
 
 
-        elif request == register_CODE:
-           pass
+    elif request == register_CODE:
+       pass
 
 
 
-      
+  
 ## real-time monitering start
-        elif request == trace_CODE:
+    elif request == trace_CODE:
 
-            for i in range(len(Rx)):
-                try:
-                    if Rx[i:i+4]=='123#':
-                        id_s = i+4
-                        break
-                except:
-                    lock.acquire()
-                    print("\n$ >> Non-WAD Client   >>  ", addr, '@', str(datetime.now()))
-                    lock.release()
+        for i in range(len(Rx)):
+            try:
+                if Rx[i:i+4]=='123#':
+                    id_s = i+4
                     break
+            except:
+                lock.acquire()
+                print("\n$ >> Non-WAD Client   >>  ", addr, '@', str(datetime.now()))
+                lock.release()
+                break
 
-            for i in range(id_s, len(Rx)):
-                if Rx[i]=='/':
-                    id_e = i
-                    break
-            
-            user_id = Rx[id_s:id_e]
+        for i in range(id_s, len(Rx)):
+            if Rx[i]=='/':
+                id_e = i
+                break
+
+        user_id = Rx[id_s:id_e]
+
+        lock.acquire()
+        fh = open('C:\\Users\\RETELLIGENCE\\Desktop\\WADING\\DB_iwen\\User_registor.txt', 'r')
+        rh = fh.read()
+        fh.close()
+        lock.release()
+        
+
+        if wad_id not in live_WAD:
             lock.acquire()
-            fh = open('C:\\Users\\RETELLIGENCE\\Desktop\\WADING\\DB_iwen\\User_registor.txt', 'r')
-            rh = fh.read()
-            fh.close()
+            print("\n$ >> Real-Time monitering :: WAD not online  >>  ", addr, user_id, ' >> ', wad_id, str(datetime.now()) )
             lock.release()
+            try:
+                conn.send(('###WAD#*#ytr321'))
+            except:
+                lock.acquire()
+                print("\n$ >> Client error  >>  ", addr, '@', str(datetime.now()))
+                lock.release()
+            finally:
+                conn.close()
+
+        else: ## WAD online!
+            while(1):
+                pass
             
-            if user_id not in live_APP:
 
 
-            elif user_id in live_APP:
-                if wad_id not in live_WAD:
-                    lock.acquire()
-                    print("\n$ >> Real-Time monitering :: WAD not online  >>  ", addr, user_id, ' >> ', wad_id, str(datetime.now()) )
-                    lock.release()
-                    try:
-                        conn.send(('###WAD#*#ytr321'))
-                    except:
-                        lock.acquire()
-                        print("\n$ >> Client error  >>  ", addr, '@', str(datetime.now()))
-                        lock.release()
-                    finally:
-                        conn.close()
-                    
-            elif user_id in live_APP:
-                if 
-
-
-
-
-            
-         
-            continue
+        
+     
+      
 ## real-time monitering end
 
 
 
 
-        elif request == flight_reg_CODE:
-            pass
+    elif request == flight_reg_CODE:
+        pass
 
 
-        else:
-            print('\n$ APP port : ',  addr, '  >>  unidentified request', '@', str(datetime.now()))
-            continue
+    else:
+        print('\n$ APP port : ',  addr, '  >>  unidentified request', '@', str(datetime.now()))
+        
 
 
 
